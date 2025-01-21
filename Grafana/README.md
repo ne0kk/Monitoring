@@ -10,6 +10,7 @@
 --------
 
 ### Ответ
+
 ![image](https://github.com/user-attachments/assets/d6db79e9-5370-4305-b60d-06bdf9520edb)
 ![image](https://github.com/user-attachments/assets/ef33daf8-3327-4afe-a9c4-7350df1a2500)
 ![image](https://github.com/user-attachments/assets/0faf0717-5511-4ec6-951b-c128275c1c42)
@@ -74,6 +75,6 @@ Alert Grafana
 1. Сохраните ваш Dashboard.Для этого перейдите в настройки Dashboard, выберите в боковом меню «JSON MODEL». Далее скопируйте отображаемое json-содержимое в отдельный файл и сохраните его.
 1. В качестве решения задания приведите листинг этого файла.
 
-[Dashboard](Grafana/Dashboard.json)
+[Dashboard](Dashboard.json)
 
 ---
