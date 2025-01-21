@@ -10,12 +10,12 @@
 --------
 
 ### Ответ
-
+Развернул контейнеры с помощью [docker](docker-compose.yml)
 ![image](https://github.com/user-attachments/assets/d6db79e9-5370-4305-b60d-06bdf9520edb)
 ![image](https://github.com/user-attachments/assets/ef33daf8-3327-4afe-a9c4-7350df1a2500)
 ![image](https://github.com/user-attachments/assets/0faf0717-5511-4ec6-951b-c128275c1c42)
 
-
+Добавил станлдартный node exporter dashboard
 Вводим идентификатор дашборда. Для Node Exporter это 1860:
 ![image](https://github.com/user-attachments/assets/fcd6b126-a2a0-4414-8d01-add0116a81bb)
 
