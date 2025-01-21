@@ -25,3 +25,6 @@ Memory
 node_memory_MemFree_bytes{instance="node-exporter:9100"}
 Disk
 node_filesystem_avail_bytes{instance="node-exporter:9100", device="/dev/mapper/centos-root"}
+
+Alert Grafana
+![image](https://github.com/user-attachments/assets/aed4d1db-3b8b-43dc-8af0-28e33b0d4ff1)
