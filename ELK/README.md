@@ -50,10 +50,15 @@ Filebeat следует сконфигурировать для отправки
 ### Ответ:
 ![image](https://github.com/user-attachments/assets/e36974fc-1764-4ac1-8d08-8401bbb37b24)
 ![image](https://github.com/user-attachments/assets/ea4f68de-d467-47bf-891d-5e653585d56b)
-[docker-compose]()
-[filebeat]()
-[logstash]()
-[logstash.template]()
+
+[docker-compose](docker-compose.yml)
+
+[filebeat](filebeat.yml)
+
+[logstash](logstash.conf)
+
+[logstash.template](logstash.template.json)
+
 
 
 ## Задание 2
