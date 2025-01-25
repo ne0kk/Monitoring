@@ -1,0 +1,143 @@
+version: '3.3'
+services:
+  
+  elasticsearch-hot:
+    container_name: elasticsearch-hot
+    image: elasticsearch:7.17.18
+    environment:
+      - node.name=elasticsearch-hot
+      - cluster.name=elasticsearch-cluster
+      - node.roles=master,data_content,data_hot
+      - bootstrap.memory_lock=true
+      - discovery.seed_hosts=elasticsearch-hot,elasticsearch-warm
+      - cluster.initial_master_nodes=elasticsearch-hot,elasticsearch-warm
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "http.host=0.0.0.0"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    stdin_open: true
+    tty: true
+    networks:
+      - elastic
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+    depends_on:
+      - elasticsearch-warm
+
+  elasticsearch-warm:
+    container_name: elasticsearch-warm
+    image: elasticsearch:7.17.18
+    environment:
+      - node.name=elasticsearch-warm
+      - cluster.name=elasticsearch-cluster
+      - bootstrap.memory_lock=true
+      - discovery.seed_hosts=elasticsearch-hot,elasticsearch-warm
+      - node.roles=master,data_warm
+      - cluster.initial_master_nodes=elasticsearch-hot,elasticsearch-warm
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "http.host=0.0.0.0"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    stdin_open: true
+    tty: true
+    networks:
+      - elastic
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+
+  kibana:
+    container_name: kibana
+    image: kibana:7.17.18
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch-hot:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch-hot:9200","http://elasticsearch-warm:9200"]'
+    depends_on:
+      - elasticsearch-hot
+      - elasticsearch-warm
+    stdin_open: true
+    tty: true
+    networks:
+      - elastic
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+
+  logstash:
+    container_name: logstash
+    image: logstash:7.17.18
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logstash.template.json:/usr/share/logstash/templates/logstash.template.json
+    ports:
+      - 5044:5044
+    depends_on:
+      - elasticsearch-hot
+      - elasticsearch-warm
+    stdin_open: true
+    tty: true
+    networks:
+      - elastic
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+  
+  filebeat:
+    user: root
+    container_name: filebeat
+    image: elastic/filebeat:7.17.18
+    depends_on:
+      - logstash
+    volumes:
+      - /var/run/docker.sock:/host_docker/docker.sock
+      - /var/lib/docker:/host_docker/var/lib/docker
+      - ./mylog:/usr/share/filebeat/mylog
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+    command: ["--strict.perms=false"]
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    stdin_open: true
+    tty: true
+    networks:
+      - elastic
+    deploy:
+      mode: global
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+
+networks:
+  elastic:
+    driver: bridge
