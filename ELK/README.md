@@ -48,6 +48,8 @@ Filebeat следует сконфигурировать для отправки
 
 --------
 ### Ответ:
+Подняли стэк ELK с помошью docker compose 
+
 ![image](https://github.com/user-attachments/assets/e36974fc-1764-4ac1-8d08-8401bbb37b24)
 ![image](https://github.com/user-attachments/assets/ea4f68de-d467-47bf-891d-5e653585d56b)
 
@@ -72,7 +74,10 @@ Filebeat следует сконфигурировать для отправки
 
 --------
 ### Ответ: 
-
+Настроил сбор логов с докер контейнеров
+![image](https://github.com/user-attachments/assets/193fb252-2e8f-4a96-b010-8f35fa44ee63)
+Так же добавил в docker-compose.yml контейнер python для отработки кода. 
+![image](https://github.com/user-attachments/assets/4c2e59ba-06ca-4aca-8e02-3458c4c2236e)
 
 
  
