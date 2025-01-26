@@ -76,7 +76,7 @@ Filebeat следует сконфигурировать для отправки
 ### Ответ: 
 Настроил сбор логов с докер контейнеров
 ![image](https://github.com/user-attachments/assets/193fb252-2e8f-4a96-b010-8f35fa44ee63)
-Так же добавил в docker-compose.yml контейнер python для отработки кода. 
+Так же добавил в docker-compose.yml контейнер python для отработки кода run.py. 
 ![image](https://github.com/user-attachments/assets/4c2e59ba-06ca-4aca-8e02-3458c4c2236e)
 
 
