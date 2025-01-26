@@ -1,12 +1,19 @@
 filebeat.inputs:
 - type: log
-  enabled: true
+  # указываем, что логи мы будем брать из контейнеров
   paths:
-    - /usr/share/filebeat/mylog/*.log
+    - '/var/lib/docker/containers/*/*.log'
+  fields:
+    type: docker
+  fields_under_root: true
 
-output.logstash:
-  hosts: ["logstash:5044"]
-
+# добавляем процессор для обогащения логов лейблами
 processors:
   - add_docker_metadata:
-      host: "unix:///host_docker/docker.sock"
+      host: "unix:///var/run/docker.sock"
+
+# указываем logstash на который нужно отправлять логи
+output.logstash:
+  hosts: ["logstash:5044"]
+  loadbalance: false
+  ssl.enabled: false
