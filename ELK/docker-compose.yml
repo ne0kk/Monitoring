@@ -34,6 +34,7 @@ services:
       - elasticsearch-warm
 
   elasticsearch-warm:
+ 
     container_name: elasticsearch-warm
     image: elasticsearch:7.17.18
     environment:
@@ -46,6 +47,7 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - "http.host=0.0.0.0"
       - xpack.security.enabled=false
+
     ulimits:
       memlock:
         soft: -1
@@ -95,7 +97,11 @@ services:
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
       - ./logstash.template.json:/usr/share/logstash/templates/logstash.template.json
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml
+    environment:
+      - "LS_JAVA_OPTS=-Xms256m -Xmx256m"
     ports:
+      - 5046:5046
       - 5044:5044
     depends_on:
       - elasticsearch-hot
@@ -110,6 +116,7 @@ services:
         max-size: "10m"
         max-file: "50"
   
+
   filebeat:
     user: root
     container_name: filebeat
@@ -117,8 +124,11 @@ services:
     depends_on:
       - logstash
     volumes:
-      - /var/run/docker.sock:/host_docker/docker.sock
-      - /var/lib/docker:/host_docker/var/lib/docker
+
+      #- /var/run/docker.sock:/host_docker/docker.sock
+      #- /var/lib/docker:/host_docker/var/lib/docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/containers/:/var/lib/docker/containers/:ro 
       - ./mylog:/usr/share/filebeat/mylog
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
     command: ["--strict.perms=false"]
@@ -137,6 +147,14 @@ services:
       options:
         max-size: "10m"
         max-file: "50"
+
+  test_elk:
+    image: library/python:3.9-alpine
+    container_name: test_elk
+    volumes:
+      - ./run.py:/opt/run.py:Z
+    entrypoint: python3 /opt/run.py
+
 
 networks:
   elastic:
